@@ -20,6 +20,8 @@ class Snake:
     def __init__(self):
         self.color = BLUE
         self.spawn()
+        self.state = "STOP"
+        self.apple_eaten = 2
 
     #spawns the snake in the middle of the screen
     def spawn(self):
@@ -28,7 +30,20 @@ class Snake:
 
     #draws the snake on the screen
     def draw(self, surface):
-        pygame.draw.rect(surface, self.color, (self.posX, self.posY, PIXELS, PIXELS * 2))
+        self.rect = pygame.draw.rect(surface, self.color, (self.posX, self.posY, PIXELS, PIXELS * self.apple_eaten))
+
+    #changes the position of the snake depending on the key pressed
+    def movement(self, state):
+        match state:
+            case "UP":
+                self.posY -= PIXELS
+            case "DOWN":
+                self.posY += PIXELS
+            case "LEFT":
+                self.posX -= PIXELS
+            case "RIGHT":
+                self.posX += PIXELS
+
 
 class Apple:
 
@@ -44,7 +59,7 @@ class Apple:
     
     #draws the apple
     def draw(self, surface):
-        pygame.draw.rect(surface, self.color, (self.posX, self.posY, PIXELS, PIXELS))
+       self.rect = pygame.draw.rect(surface, self.color, (self.posX, self.posY, PIXELS, PIXELS))
 
 class Background:
     
@@ -58,6 +73,18 @@ class Background:
                     pygame.draw.rect(surface, BACKGROUND_COLOR_2, (col * PIXELS, row * PIXELS, PIXELS, PIXELS))
                 if col != SQUARE - 1:
                     i += 1
+
+
+#collision method that checks if the snake rectangle
+#collides with the apple rectangle, if the condition is true it will
+#draw the snake longer and spawn another apple
+def collision(snake, apple, screen):
+    if snake.rect.colliderect(apple.rect):
+        snake.apple_eaten += 1
+        snake.draw(screen)
+        apple.spawn()
+        apple.draw(screen)
+
 
 def main():
     
@@ -81,16 +108,28 @@ def main():
                 exit()
             if game_active:
                 if event.type == pygame.KEYDOWN:
+                    #match case to check the pressed keys and assigning a string value to snake.state
                     match event.key:
-                        case pygame.K_w:
-                            snake.posY -= PIXELS
-                        case pygame.K_s:
-                            snake.posY += PIXELS
+                        case pygame.K_w | pygame.K_UP:
+                            snake.state = "UP"
+                        case pygame.K_s | pygame.K_DOWN:
+                            snake.state = "DOWN"
+                        case pygame.K_a | pygame.K_LEFT:
+                            snake.state = "LEFT"
+                        case pygame.K_d | pygame.K_RIGHT:
+                            snake.state = "RIGHT"
 
 
+        #draw calls
         background.draw(screen)
         apple.draw(screen)
         snake.draw(screen)
+        
+
+        pygame.time.delay(120)
+        snake.movement(snake.state)
+
+        collision(snake, apple, screen) 
 
         pygame.display.update()
         clock.tick(60)
