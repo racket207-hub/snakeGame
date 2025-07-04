@@ -12,7 +12,6 @@ from costants import WINDOW_WIDTH, WINDOW_HEIGHT
 def collision(snake, apple, screen):
     if snake.bodies[0].colliderect(apple.rect):
         snake.grow = True
-        snake.apple_eaten += 1
         snake.drawBody(screen)
         apple.spawn()
         apple.draw(screen)
@@ -64,10 +63,11 @@ def main():
         
 
             pygame.time.delay(120)
-            snake.movement(snake.state)
+            #game_active = snake.selfCollision(snake.movement(snake.state))
+            game_active = snake.movement(snake.state)
 
-            collision(snake, apple, screen) 
-
+            collision(snake, apple, screen)
+           
         else:
            background.draw(screen)
            screen.blit(game_message, game_message_rect) 

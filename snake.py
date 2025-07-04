@@ -9,7 +9,6 @@ class Snake:
         self.color = BLUE
         self.spawn()
         self.state = "STOP"
-        self.apple_eaten = 1
         self.bodies = [pygame.Rect(self.posX, self.posY, PIXELS, PIXELS)]  # Start with the head
         self.grow = False  # Growth flag
 
@@ -40,19 +39,37 @@ class Snake:
     #changes the position of the snake depending on the key pressed
     def movement(self, state):
         head = self.bodies[0].copy()
-        match state:
-            case "UP":
-                head.y -= PIXELS
-            case "DOWN":
-                head.y += PIXELS
-            case "LEFT":
-                head.x -= PIXELS
-            case "RIGHT":
-                head.x += PIXELS
+        if head.y <= 640 and head.y >= 0 and head.x <= 640 and head.x >= 0:
+            match state:
+                case "UP":
+                    head.y -= PIXELS
+                case "DOWN":
+                    head.y += PIXELS
+                case "LEFT":
+                    head.x -= PIXELS
+                case "RIGHT":
+                    head.x += PIXELS
 
+        else:
+            self.__init__()
+            return False
+        
         self.bodies.insert(0, head)
 
         if not self.grow:
             self.bodies.pop()
         else:
             self.grow = False
+
+        #for body in range(len(self.bodies)):
+            #if body == 0:
+              #  continue
+            #if self.bodies[0].colliderect(head[1:]):
+             #   return False
+            #else:
+        return True
+
+
+
+    
+
