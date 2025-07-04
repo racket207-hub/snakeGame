@@ -1,78 +1,13 @@
 import pygame
-import random
 from sys import exit
-
-#COSTANTS
-WINDOW_HEIGHT = 640
-WINDOW_WIDTH = 640
-PIXELS = 32
-SQUARE = int(WINDOW_WIDTH/PIXELS)
-
-#COLORS
-BACKGROUND_COLOR_1 = (156, 210, 54)
-BACKGROUND_COLOR_2 = (147,203, 57)
-RED = (255, 0 ,0)
-BLUE = (0, 0, 255)
-
-class Snake:
-
-    #initializes the color and the spawn of the snake
-    def __init__(self):
-        self.color = BLUE
-        self.spawn()
-        self.state = "STOP"
-        self.apple_eaten = 2
-
-    #spawns the snake in the middle of the screen
-    def spawn(self):
-        self.posX = WINDOW_WIDTH / 2 - PIXELS
-        self.posY = WINDOW_HEIGHT / 2
-
-    #draws the snake on the screen
-    def draw(self, surface):
-        self.rect = pygame.draw.rect(surface, self.color, (self.posX, self.posY, PIXELS, PIXELS * self.apple_eaten))
-
-    #changes the position of the snake depending on the key pressed
-    def movement(self, state):
-        match state:
-            case "UP":
-                self.posY -= PIXELS
-            case "DOWN":
-                self.posY += PIXELS
-            case "LEFT":
-                self.posX -= PIXELS
-            case "RIGHT":
-                self.posX += PIXELS
+from snake import Snake
+from background import Background
+from apple import Apple
+from costants import WINDOW_WIDTH, WINDOW_HEIGHT
 
 
-class Apple:
 
-    #initializes the color and the spawn of the apple
-    def __init__(self):
-        self.color = RED
-        self.spawn()
 
-    #spawns the apple randomically
-    def spawn(self):
-        self.posX = random.randrange(0, WINDOW_WIDTH, PIXELS)
-        self.posY = random.randrange(0, WINDOW_WIDTH, PIXELS)
-    
-    #draws the apple
-    def draw(self, surface):
-       self.rect = pygame.draw.rect(surface, self.color, (self.posX, self.posY, PIXELS, PIXELS))
-
-class Background:
-    
-    #draws the checkered surface
-    def draw(self, surface):
-        surface.fill(BACKGROUND_COLOR_1)
-        i = 0
-        for row in range(SQUARE):
-            for col in range(SQUARE):
-                if i % 2 == 0:
-                    pygame.draw.rect(surface, BACKGROUND_COLOR_2, (col * PIXELS, row * PIXELS, PIXELS, PIXELS))
-                if col != SQUARE - 1:
-                    i += 1
 
 
 #collision method that checks if the snake rectangle
