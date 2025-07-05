@@ -18,23 +18,13 @@ class Snake:
         self.posX = WINDOW_WIDTH / 2 - PIXELS
         self.posY = WINDOW_HEIGHT / 2
 
-    #draws the head of the snake on the screen
-    #def drawHead(self, surface):
-        #self.rect = pygame.draw.rect(surface, self.color, (self.posX, self.posY, PIXELS, PIXELS ))
-        #calls directly for the method to draw the rest of the body
-        #self.drawBody(surface)
-
+    
     #draws the rest of the body of the snake
     def drawBody(self, surface):
         for segment in self.bodies:
             pygame.draw.rect(surface, self.color, segment)
-        #self.bodies = [pygame.draw.rect(surface, self.color, (self.posX, self.posY, PIXELS, PIXELS * self.apple_eaten))]
-        #self.bodies_rect = (pygame.draw.rect(surface, self.color, (self.posX, self.posY, PIXELS, PIXELS * self.apple_eaten))) 
-        #self. getRect()
-
-    #def getRect(self):
-        #for rect in range(len(self.bodies)):
-            #self.bodies_rect = pygame.draw.rect(self.bodies[rect])
+              
+        return True
 
     #changes the position of the snake depending on the key pressed
     def movement(self, state):
@@ -61,13 +51,15 @@ class Snake:
         else:
             self.grow = False
 
-        #for body in range(len(self.bodies)):
-            #if body == 0:
-              #  continue
-            #if self.bodies[0].colliderect(head[1:]):
-             #   return False
-            #else:
+    def check_self_collision(self):
+        head = self.bodies[0]
+        for segment in self.bodies[1:]:
+            if head.colliderect(segment):
+                self.__init__()
+                return False
         return True
+                    
+
 
 
 

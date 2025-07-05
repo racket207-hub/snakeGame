@@ -65,8 +65,11 @@ def main():
             pygame.time.delay(120)
             #game_active = snake.selfCollision(snake.movement(snake.state))
             game_active = snake.movement(snake.state)
+            if game_active == False:
+                continue
 
             collision(snake, apple, screen)
+            game_active = snake.check_self_collision()
            
         else:
            background.draw(screen)
